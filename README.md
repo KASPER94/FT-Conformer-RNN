@@ -32,6 +32,21 @@ cd NeMo
     uv pip install nemo_toolkit['all']
     check torch and GPU : python set_up_check.py
 
+    si Windows installation spécifique:
+        uv pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+        uv pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+        uv pip install pytorch-lightning hydra-core omegaconf
+        uv pip install librosa soundfile transformers datasets
+        uv pip install nltk spacy
+        uv pip install torchmetrics scipy numpy
+        uv pip install lightning[extra]
+        uv pip install --no-deps nemo_toolkit
+        uv pip install inflect jiwer sacremoses
+        uv pip install editdistance g2p-en webdataset braceexpand
+        uv pip install sentencepiece  # Alternative à youtokentome
+
+    test nemo = python test_nemo.py
+
 PHASE 2 — LE DATASET FRANÇAIS
 1️⃣ Télécharger Common Voice FR
     https://commonvoice.mozilla.org/fr/datasets

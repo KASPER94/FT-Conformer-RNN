@@ -1,0 +1,38 @@
+# NeMo d'abord (fixe numpy<2.0)
+nemo_toolkit==2.3.1
+
+# PyTorch CPU
+--index-url https://download.pytorch.org/whl/cpu
+torch
+torchvision
+torchaudio
+
+# Core frameworks
+pytorch-lightning
+hydra-core
+omegaconf
+lightning
+
+# Audio processing
+librosa
+soundfile
+
+# NLP et ML
+transformers
+datasets
+
+# Math (numpy sera fixé par nemo)
+torchmetrics
+scipy
+
+# Text processing
+inflect
+jiwer
+sacremoses
+editdistance
+g2p-en
+
+# Data loading
+webdataset
+braceexpand
+sentencepiece

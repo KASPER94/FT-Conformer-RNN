@@ -2,11 +2,30 @@
 name = "ft-conformer-rnn"
 version = "0.1.0"
 description = "Add your description here"
-readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.10.17"
 dependencies = [
-    "nemo>=7.1.4",
-    "torch>=2.7.1",
-    "torchaudio>=2.7.1",
-    "torchvision>=0.22.1",
+    "braceexpand",
+    "datasets",
+    "editdistance",
+    "einops>=0.8.1",
+    "g2p-en",
+    "hydra-core",
+    "inflect",
+    "jiwer",
+    "lhotse>=1.30.3",
+    "librosa",
+    "lightning",
+    "nemo-toolkit==2.3.1",
+    "omegaconf",
+    "pytorch-lightning",
+    "sacremoses",
+    "scipy",
+    "sentencepiece",
+    "soundfile",
+    "torch",
+    "torchaudio",
+    "torchmetrics",
+    "torchvision",
+    "transformers",
+    "webdataset",
 ]
