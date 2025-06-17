@@ -1,3 +1,13 @@
+Metadata-Version: 2.4
+Name: ft-conformer-rnn
+Version: 0.1.0
+Summary: Add your description here
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: torch>=2.7.1
+Requires-Dist: torchaudio>=2.7.1
+Requires-Dist: torchvision>=0.22.1
+
 # FT-Conformer-RNN
 fine tune Conformer TT RealTime for real
 

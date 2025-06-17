@@ -1,0 +1,7 @@
+README.md
+pyproject.toml
+ft_conformer_rnn.egg-info/PKG-INFO
+ft_conformer_rnn.egg-info/SOURCES.txt
+ft_conformer_rnn.egg-info/dependency_links.txt
+ft_conformer_rnn.egg-info/requires.txt
+ft_conformer_rnn.egg-info/top_level.txt
