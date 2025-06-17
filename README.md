@@ -66,6 +66,7 @@ PHASE 2 — LE DATASET FRANÇAIS
     https://huggingface.co/Ilyes/wav2vec2-large-xlsr-53-french
     https://arxiv.org/abs/2005.08100
     https://paperswithcode.com/sota/speech-recognition-on-common-voice-french
+    Wav2Vec not opti stay on Conformer/RNN-T
  fine-tuner un model:
     wget https://huggingface.co/nvidia/stt_fr_conformer_transducer_large/blob/main/stt_fr_conformer_transducer_large.nemo
 
