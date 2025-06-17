@@ -46,7 +46,11 @@ PHASE 2 — LE DATASET FRANÇAIS
  ou 
  Invoke-WebRequest -Uri "https://dldata-public.s3.us-east-2.amazonaws.com/2086-149220-0033.wav" -OutFile "2086-149220-0033.wav"
 
- information: https://huggingface.co/nvidia/stt_fr_conformer_transducer_large
+ information: 
+    https://huggingface.co/nvidia/stt_fr_conformer_transducer_large
+    https://huggingface.co/Ilyes/wav2vec2-large-xlsr-53-french
+    https://arxiv.org/abs/2005.08100
+    https://paperswithcode.com/sota/speech-recognition-on-common-voice-french
  fine-tuner un model:
     wget https://huggingface.co/nvidia/stt_fr_conformer_transducer_large/blob/main/stt_fr_conformer_transducer_large.nemo
 
