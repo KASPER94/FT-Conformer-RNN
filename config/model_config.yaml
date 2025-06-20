@@ -1,0 +1,202 @@
+# Configuration du modèle Conformer RNN-T pour le domaine ferroviaire
+name: ConformerRNNT_Railway
+
+model:
+  # Modèle de base
+  _target_: nemo.collections.asr.models.rnnt_models.EncDecRNNTModel
+  
+  # Configuration générale
+  sample_rate: 16000
+  labels: [" ", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "'"]
+  
+  # Préprocesseur audio
+  preprocessor:
+    _target_: nemo.collections.asr.modules.AudioToMelSpectrogramPreprocessor
+    sample_rate: ${model.sample_rate}
+    normalize: "per_feature"
+    window_size: 0.025
+    window_stride: 0.01
+    window: "hann"
+    features: 80
+    n_fft: 512
+    frame_splicing: 1
+    dither: 0.00001
+    pad_zero: false
+    
+  # Augmentation spectrale
+  spec_augment:
+    _target_: nemo.collections.asr.modules.SpectrogramAugmentation
+    freq_masks: 2
+    time_masks: 2
+    freq_width: 27
+    time_width: 0.05
+    
+  # Encodeur Conformer
+  encoder:
+    _target_: nemo.collections.asr.modules.ConformerEncoder
+    feat_in: ${model.preprocessor.features}
+    feat_out: 512
+    n_layers: 16
+    d_model: 512
+    
+    # Attention multi-têtes
+    n_heads: 8
+    d_head: 64
+    d_inner: 2048
+    dropout: 0.1
+    dropout_emb: 0.0
+    dropout_att: 0.1
+    
+    # Convolution
+    conv_kernel_size: 9
+    conv_norm_type: 'batch_norm'
+    
+    # Position encoding
+    pos_emb_max_len: 5000
+    
+    # Autres paramètres
+    xscaling: true
+    untie_biases: true
+    pos_bias_u: null
+    pos_bias_v: null
+    
+  # Décodeur RNN-T
+  decoder:
+    _target_: nemo.collections.asr.modules.RNNTDecoder
+    normalization_mode: null
+    random_state_sampling: false
+    blank_as_pad: true
+    
+    prednet:
+      pred_hidden: 640
+      pred_rnn_layers: 1
+      t_max: null
+      dropout: 0.2
+    
+  # Joint Network
+  joint:
+    _target_: nemo.collections.asr.modules.RNNTJoint
+    log_softmax: null
+    preserve_memory: false
+    fuse_loss_wer: true
+    fused_batch_size: 16
+    
+    jointnet:
+      joint_hidden: 640
+      activation: "relu"
+      dropout: 0.2
+    
+  # Fonction de perte RNN-T
+  loss:
+    loss_name: "default"
+    warprnnt_numba_kwargs:
+      stream_safe: true
+      
+  # Décodage
+  decoding:
+    strategy: "greedy_batch"
+    
+    # Paramètres pour décodage beam search (optionnel)
+    beam:
+      beam_size: 2
+      return_best_hypothesis: true
+      score_norm: true
+      tsd_max_sym_exp: 50
+      alsd_max_target_len: 2.0
+      
+# Configuration d'optimisation
+optim:
+  name: adamw
+  lr: 1e-4
+  betas: [0.9, 0.98]
+  weight_decay: 1e-3
+  
+  # Scheduler
+  sched:
+    name: CosineAnnealing
+    warmup_steps: 1000
+    warmup_ratio: null
+    min_lr: 1e-6
+    last_epoch: -1
+
+# Configuration des données d'entraînement
+train_ds:
+  manifest_filepath: "data/manifests/train_manifest.json"
+  sample_rate: ${model.sample_rate}
+  batch_size: 8
+  shuffle: true
+  num_workers: 4
+  pin_memory: true
+  use_start_end_token: false
+  
+  # Augmentation temporelle
+  speed_perturb: true
+  can_split_utt: true
+  
+  # Filtrage
+  min_duration: 0.1
+  max_duration: 20.0
+  
+  # Buckets pour optimiser les batches
+  bucketing_strategy: "synced_randomized"
+  bucketing_batch_size: null
+
+# Configuration des données de validation  
+validation_ds:
+  manifest_filepath: "data/manifests/val_manifest.json"
+  sample_rate: ${model.sample_rate}
+  batch_size: 8
+  shuffle: false
+  num_workers: 4
+  pin_memory: true
+  use_start_end_token: false
+
+# Configuration des données de test
+test_ds:
+  manifest_filepath: "data/manifests/test_manifest.json"
+  sample_rate: ${model.sample_rate}
+  batch_size: 8
+  shuffle: false
+  num_workers: 4
+  pin_memory: true
+  use_start_end_token: false
+
+# Configuration spécifique au domaine ferroviaire
+railway_config:
+  # Vocabulaire spécialisé
+  cities: 
+    - "lyon"
+    - "paris" 
+    - "bordeaux"
+    - "chalon"
+    - "chauny"
+    - "nogent"
+    - "roanne"
+    - "saint-etienne"
+    - "marseille"
+    - "toulouse"
+    
+  train_types:
+    - "ter"
+    - "tgv" 
+    - "intercites"
+    - "omnibus"
+    - "express"
+    
+  railway_terms:
+    - "correspondance"
+    - "terminus"
+    - "quai"
+    - "voie"
+    - "gare"
+    - "desserte"
+    - "direction"
+    - "arret"
+    - "depart"
+    - "arrivee"
+    
+  # Pondération pour les termes importants
+  vocabulary_weights:
+    cities: 2.0
+    train_types: 1.5
+    railway_terms: 1.2
